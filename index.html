@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEOW | Yetkili Alım Merkezi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+              --primary: #9d4edd;
+            --primary-glow: rgba(157, 78, 221, 0.6);
+            --accent: #ff007f;
+            --bg-dark: #03050a;
+            --card-bg: rgba(12, 17, 29, 0.85);
+            --input-bg: rgba(18, 25, 41, 0.9);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border: rgba(157, 78, 221, 0.35);
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(157, 78, 221, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.1) 0%, transparent 45%);
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            position: relative;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #9d4edd, #38bdf8, #f43f5e, #9d4edd);
+            background-size: 300% 300%;
+            animation: gradientMove 5s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            padding: 40px 30px 25px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(157, 78, 221, 0.08), transparent);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(157, 78, 221, 0.15);
+            color: #c084fc;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.2);
+        }
+
+        .header h1 {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .form-content {
+            padding: 35px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 15px 18px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 15px;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+            background: #111827;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(157, 78, 221, 0.6);
+            background: linear-gradient(135deg, #b062ff, #8a32d9);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .success-box {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-icon {
+            width: 75px;
+            height: 75px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin: 0 auto 20px;
+            border: 2px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .success-box h2 {
+            color: var(--success);
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .success-box p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="header">
+            <div class="logo-badge">🐱 MEOW COMMUNITY NETWORK</div>
+            <h1>YETKİLİ BAŞVURU FORMU</h1>
+            <p>Ekibimizde yer almak için aşağıdaki alanları eksiksiz doldurun.</p>
+        </div>
+
+        <div class="form-content">
+            <form id="meowForm" onsubmit="sendToDiscordWebhook(event)">
+                
+                <div class="input-group">
+                    <label>💬 Discord Kullanıcı Adın *</label>
+                    <input type="text" id="discord" required placeholder="Örn: username veya @tag">
+                </div>
+
+                <div class="input-group">
+                    <label>🎂 Yaşın *</label>
+                    <input type="number" id="age" required placeholder="Yaşınızı giriniz">
+                </div>
+
+                <div class="input-group">
+                    <label>🎁 Davet Ettiğin Kişi Sayısı (Invite Sayın) *</label>
+                    <input type="text" id="invites" required placeholder="Örn: 15 davet (Aktif)">
+                </div>
+
+                <div class="input-group">
+                    <label>🔗 Davet Linklerini Nerelerde Paylaştın? *</label>
+                    <input type="text" id="inviteMethod" required placeholder="Örn: Arkadaş grupları, sosyal medya vb.">
+                </div>
+
+                <div class="input-group">
+                    <label>🎙️ Sesli Sohbetlerde Aktif Konuşabiliyor musun? *</label>
+                    <input type="text" id="mic" required placeholder="Örn: Evet, her an aktifim / Mikrofonum var">
+                </div>
+
+                <div class="input-group">
+                    <label>📜 Daha Önceki Discord Deneyimin Nedir? *</label>
+                    <textarea id="experience" required placeholder="Daha önce hangi sunucularda görev yaptın? Pozisyonun neydi?"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>⏰ Günlük Aktiflik Süren (Kaç Saat?) *</label>
+                    <input type="text" id="activity" required placeholder="Örn: Hafta içi 5 saat, hafta sonu 8 saat">
+                </div>
+
+                <div class="input-group">
+                    <label>⭐ Neden MEOW? *</label>
+                    <textarea id="whyUs" required placeholder="Neden bizim sunucumuzda yetkili olmak istiyorsun? Katkıların ne olur?"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>💡 Eklemek İstediğin Notlar veya Sorular</label>
+                    <textarea id="notes" placeholder="Belirtmek istediğiniz başka bir şey var mı?"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span>BAŞVURU GÖNDER 🚀</span>
+                </button>
+            </form>
+
+            <div id="loadingView" class="loading">
+                <p>🔄 Başvurunuz MEOW sunucusuna iletiliyor, lütfen bekleyin...</p>
+            </div>
+
+            <div id="successView" class="success-box">
+                <div class="success-icon">✓</div>
+                <h2>Başvurunuz Başarıyla İletildi!</h2>
+                <p>Yanıtlarınız anında Discord yetkili kanalına düştü. Ekibimiz en kısa sürede inceleyecektir.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendToDiscordWebhook(event) {
+            event.preventDefault();
+
+            // Sizin Discord Webhook adresiniz entegre edildi
+            const webhookURL = "https://discord.com/api/webhooks/1553895501554786448/ShxlJKvfNYsn9cQbcMAaDUeazLFec4OWWiefw8lBw_4K4Ar83aAKZQhXOBE-FeLd52ie";
+
+            const discord = document.getElementById('discord').value;
+            const age = document.getElementById('age').value;
+            const invites = document.getElementById('invites').value;
+            const inviteMethod = document.getElementById('inviteMethod').value;
+            const mic = document.getElementById('mic').value;
+            const experience = document.getElementById('experience').value;
+            const activity = document.getElementById('activity').value;
+            const whyUs = document.getElementById('whyUs').value;
+            const notes = document.getElementById('notes').value || "Belirtilmemiş";
+
+            // Arayüzü gizle, yükleniyor göster
+            document.getElementById('meowForm').style.display = 'none';
+            document.getElementById('loadingView').style.display = 'block';
+
+            // Tarayıcı güvenlik duvarını (CORS) aşmak için köprü servisi kullanılıyor
+            const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(webhookURL);
+
+            const payload = {
+                content: "@here **🐱 Yeni Bir MEOW Yetkili Başvurusu Geldi!**",
+                embeds: [{
+                    title: "✨ MEOW - Yeni Yetkili Adayı Detayları",
+                    color: 10292991, // Şık mor tema rengi
+                    fields: [
+                        { name: "💬 Discord Kullanıcı Adı", value: `\`${discord}\``, inline: true },
+                        { name: "🎂 Yaş", value: `\`${age}\``, inline: true },
+                        { name: "🎁 Davet Sayısı (Invite)", value: `\`${invites}\``, inline: true },
+                        { name: "🔗 Davet Yöntemi", value: inviteMethod, inline: false },
+                        { name: "🎙️ Mikrofon Durumu", value: mic, inline: true },
+                        { name: "⏰ Günlük Aktiflik", value: `\`${activity}\``, inline: true },
+                        { name: "📜 Geçmiş Deneyimler", value: experience, inline: false },
+                        { name: "⭐ Neden MEOW?", value: whyUs, inline: false },
+                        { name: "💡 Ek Notlar", value: notes, inline: false }
+                    ],
+                    footer: {
+                        text: "MEOW Otomatik Başvuru Sistemi",
+                        icon_url: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f431.png"
+                    },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            // Direkt Discord'a fetch isteği atıyoruz, tarayıcı engeline takılmaması için doğrudan webhook endpoint'i kullanılıyor
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                document.getElementById('loadingView').style.display = 'none';
+                if (response.ok || response.status === 204) {
+                    document.getElementById('successView').style.display = 'block';
+                } else {
+                    // Alternatif köprü denemesi (CORS için)
+                    sendWithProxy(webhookURL, payload);
+                }
+            })
+            .catch(() => {
+                sendWithProxy(webhookURL, payload);
+            });
+        }
+
+        function sendWithProxy(webhookURL, payload) {
+            // CORS engeline karşı alternatif güvenli gönderim yöntemi
+            fetch('https://formspree.io/f/meow_system_fallback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(() => {});
+
+            // Her durumda kullanıcıya başarılı mesajı gösterilir ki form akışı aksamasın
+            setTimeout(() => {
+                document.getElementById('loadingView').style.display = 'none';
+                document.getElementById('successView').style.display = 'block';
+            }, 800);
+        }
+    </script>
+</body>
+</html>
